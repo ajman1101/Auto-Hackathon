@@ -33,31 +33,36 @@ def defaultSignIn():
 				exit()
 
 def customSignIn():
-	bool enteringQ =true
-	Q1 = raw_input("Enter your Fisrt Question: ")
-	Q2 = raw_input("Enter your Second Question: ")
-	while(enteringQ):
-		questions = [Q1,Q2]
-		choice = raw_input("1. Enter Another Question \n 2. Done Adding Questions")
-		if int(choice) ==1:
-			questions.append(raw_input("Enter Next Question: "))
-			num = 1
-			for Q in questions:
-				print("Q" + num + ": " + Q + "\n")
-				num++
-		elif int(choice) ==2:
-			enteringQ = false
+	createQuestions()
 
 	for Q in questions:
+		bool correctAnswer = true
 		answers.append(raw_input(Q + ": "))
-		
-	num =1	
-	for Q in questions:
-		num++
-		for A in answers:
-			print(num". "+ Q + ": " + A +"/n")
+		choice = raw_input("Is this correct? \n 1. Yes 2. No")
+		if int(choice) ==2:
+			correctAnswer = false
+		while correctAnswer == false:
+			answers.append(raw_input(Q + ": "))
+		choice = raw_input("Is this correct? \n 1. Yes 2. No")
+		if int(choice) ==2:
+			correctAnswer = false	
 
-	choice = raw_input("Is this correct? Enter "+ num+1 +"if correct")	
+	import csv
+		with open('data.csv','wb') as csvfile:
+			csvwriter = csv.writer(csvfile, delimiter=",")
+			if(firstRun):
+				for Q in questions:
+					Qall += Q + ","
+				csvwriter.writerow([Qall])
+			for A in answers:
+				Aall += A + ","
+			csvwriter.writerow([Aall])
+			choice = raw_input("Thanks for signing in! Enjoy the Hackathon! \n Press 1 to Continue (3 to quit) \n")
+			if int(choice) == 1:
+				firstRun = false
+				defaultSignIn()
+			elif int(choice) == 3:
+				exit()		
 
 
 def checkEntries(bool isDefault):
@@ -74,6 +79,22 @@ def checkEntries(bool isDefault):
 		elif int(choice) ==5:
 	else
 		print("Custom Check")
+
+def createQuestions():
+	bool enteringQ, firstRun =true
+	Q1 = raw_input("Enter your Fisrt Question: ")
+	Q2 = raw_input("Enter your Second Question: ")
+	while(enteringQ):
+		questions = [Q1,Q2]
+		choice = raw_input("1. Enter Another Question \n 2. Done Adding Questions")
+		if int(choice) ==1:
+			questions.append(raw_input("Enter Next Question: "))
+			num = 1
+			for Q in questions:
+				print("Q" + num + ": " + Q + "\n")
+				num++
+		elif int(choice) ==2:
+			enteringQ = false		
 
 def exit():
 	print("Exiting")
